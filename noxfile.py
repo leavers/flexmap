@@ -1,7 +1,8 @@
 import os
 import re
+import sys
 from functools import lru_cache
-from typing import Dict
+from typing import Any, Dict
 
 import nox
 from nox.command import CommandFailed
@@ -58,6 +59,44 @@ For more shells refer to:
 """
 
 
+@lru_cache(maxsize=1)
+def get_pyproject_toml() -> Dict[str, Any]:
+    with open("pyproject.toml") as fp:
+        return load(fp)
+
+
+@lru_cache(maxsize=1)
+def get_python_version() -> str:
+    pyproject = get_pyproject_toml()
+    if m := re.search(r">=\s*(\d+(\.\d+)*)", pyproject["project"]["requires-python"]):
+        return m.group(1)
+    else:
+        return f"{sys.version_info.major}.{sys.version_info.minor}"
+
+
+@lru_cache(maxsize=1)
+def get_dev_dependencies() -> Dict[str, str]:
+    pyproject = get_pyproject_toml()
+    pat = re.compile(r"[ <>~=]")
+    dev_deps: Dict[str, str] = {}
+    for dep in pyproject["tool"]["pdm"]["dev-dependencies"]["dev"]:
+        sep = -1
+        for m in pat.finditer(dep):
+            sep = m.span()[0]
+            break
+        if sep == -1:
+            dev_deps[dep] = dep
+        else:
+            dev_deps[dep[:sep]] = dep
+    return dev_deps
+
+
+AUTOFLAKE_VERSION = get_dev_dependencies()["autoflake"]
+MYPY_VERSION = get_dev_dependencies()["mypy"]
+RUFF_VERSION = get_dev_dependencies()["ruff"]
+SOURCES = ["fluentmap.py", "noxfile.py", "tests"]
+
+
 @nox.session(python=False)
 def shell_completion(session: Session):
     shell = os.getenv("SHELL")
@@ -95,31 +134,6 @@ def clean(session: Session):
         "-c",
         "find . | grep -E '(__pycache__|\.pyc|\.pyo$$)' | xargs rm -rf",
     )
-
-
-@lru_cache(maxsize=1)
-def get_dev_dependencies() -> Dict[str, str]:
-    pat = re.compile(r"[ <>~=]")
-
-    with open("pyproject.toml") as fp:
-        pyproject = load(fp)
-    dev_deps: Dict[str, str] = {}
-    for dep in pyproject["tool"]["pdm"]["dev-dependencies"]["dev"]:
-        sep = -1
-        for m in pat.finditer(dep):
-            sep = m.span()[0]
-            break
-        if sep == -1:
-            dev_deps[dep] = dep
-        else:
-            dev_deps[dep[:sep]] = dep
-    return dev_deps
-
-
-AUTOFLAKE_VERSION = get_dev_dependencies()["autoflake"]
-MYPY_VERSION = get_dev_dependencies()["mypy"]
-RUFF_VERSION = get_dev_dependencies()["ruff"]
-SOURCES = ["fluentmap.py", "noxfile.py", "tests"]
 
 
 @nox.session(python="3.8", reuse_venv=True)
