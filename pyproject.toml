@@ -17,7 +17,7 @@ distribution = true
 
 [tool.pdm.build]
 includes = ["fluentmap.py"]
-excludes = ["tests/"]
+excludes = ["tests"]
 
 [tool.pdm.version]
 source = "file"
