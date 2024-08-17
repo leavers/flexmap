@@ -1,2 +1,4 @@
-# flexmap
-Drop-in replacement for Python map with concurrency support
+# Fluentmap
+
+Drop-in replacement for Python map with concurrency support.
+

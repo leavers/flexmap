@@ -1,0 +1,64 @@
+[project]
+name = "fluentmap"
+description = "Drop-in replacement for Python map with concurrency support"
+authors = [{ name = "Leavers", email = "leavers930@gmail.com" }]
+dependencies = []
+requires-python = ">=3.8"
+readme = "README.md"
+license = { text = "MIT" }
+dynamic = ["version"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+includes = ["fluentmap.py"]
+excludes = ["tests/"]
+
+[tool.pdm.version]
+source = "file"
+path = "fluentmap.py"
+
+[tool.pdm.dev-dependencies]
+dev = [
+  "autoflake>=2.3.1",
+  "mypy>=1.11.1",
+  "nox>=2024.4.15",
+  "pytest>=8.3.2",
+  "ruff>=0.6.1",
+  "rtoml>=0.11.0",
+]
+
+[tool.autoflake]
+in-place = true
+recursive = true
+remove-all-unused-imports = true
+ignore-init-module-imports = true
+remove-duplicate-keys = true
+remove-unused-variables = true
+
+[tool.coverage.run]
+branch = true
+source = ["fluentmap.py"]
+parallel = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ["pragma: no cover"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.mypy]
+check_untyped_defs = true
+follow_imports = "error"
+ignore_missing_imports = true
+show_error_codes = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
