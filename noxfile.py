@@ -190,3 +190,16 @@ def mypy(session: Session, mypy: str):
 @nox.session(python=False)
 def test(session: Session):
     session.run("pytest", "tests")
+
+
+@nox.session(reuse_venv=True)
+def test_for_ci(session: Session):
+    session.install(
+        "coverage[toml]",
+        "pytest",
+        "pytest-asyncio",
+        "pytest-cov",
+        "pytest-mock",
+        "pytest-timeout",
+    )
+    test(session)
