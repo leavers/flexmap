@@ -1,7 +1,25 @@
 [project]
 name = "fluentmap"
-description = "Drop-in replacement for Python map with concurrency support"
-authors = [{ name = "Leavers", email = "leavers930@gmail.com" }]
+description = "A drop-in Python map replacement featuring parallel and batch processing."
+authors = [
+  { name = "leavers" },
+  { name = "Leavers", email = "leavers930@gmail.com" },
+]
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+]
 dependencies = []
 requires-python = ">=3.8"
 readme = "README.md"
