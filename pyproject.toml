@@ -23,16 +23,6 @@ excludes = ["tests"]
 source = "file"
 path = "fluentmap.py"
 
-[tool.pdm.dev-dependencies]
-dev = [
-  "autoflake>=2.3.1",
-  "mypy>=1.11.1",
-  "nox>=2024.4.15",
-  "pytest>=8.3.2",
-  "ruff>=0.6.1",
-  "rtoml>=0.11.0",
-]
-
 [tool.autoflake]
 in-place = true
 recursive = true
@@ -62,3 +52,13 @@ warn_unused_configs = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
+
+[dependency-groups]
+dev = [
+    "autoflake>=2.3.1",
+    "mypy>=1.11.1",
+    "nox>=2024.4.15",
+    "pytest>=8.3.2",
+    "ruff>=0.6.1",
+    "rtoml>=0.11.0",
+]
