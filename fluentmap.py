@@ -1,5 +1,6 @@
 """
-Fluentmap is a drop-in replacement for Python map with concurrency support.
+Fluentmap is a drop-in replacement for Python map featuring parallel and batch
+processing.
 
 Copyright (c) 2020-2024, Leavers.
 License: MIT
@@ -25,7 +26,7 @@ from typing import (
     runtime_checkable,
 )
 
-__version__ = "0.0.2"
+__version__ = "0.1.0"
 __all__ = ("Arguments", "map")
 
 
