@@ -79,7 +79,7 @@ def get_dev_dependencies() -> Dict[str, str]:
     pyproject = get_pyproject_toml()
     pat = re.compile(r"[ <>~=]")
     dev_deps: Dict[str, str] = {}
-    for dep in pyproject["tool"]["pdm"]["dev-dependencies"]["dev"]:
+    for dep in pyproject["dependency-groups"]["dev"]:
         sep = -1
         for m in pat.finditer(dep):
             sep = m.span()[0]
@@ -190,3 +190,16 @@ def mypy(session: Session, mypy: str):
 @nox.session(python=False)
 def test(session: Session):
     session.run("pytest", "tests")
+
+
+@nox.session(reuse_venv=True)
+def test_for_ci(session: Session):
+    session.install(
+        "coverage[toml]",
+        "pytest",
+        "pytest-asyncio",
+        "pytest-cov",
+        "pytest-mock",
+        "pytest-timeout",
+    )
+    test(session)
